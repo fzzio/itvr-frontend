@@ -1,17 +1,7 @@
 'use client'
-import { useState } from "react";
+import type { Message } from "@/types";
 
-interface Message {
-  id: number;
-  role: "user" | "bot";
-  content: string;
-}
-
-export default function ChatBody() {
-  const [messages] = useState<Message[]>([
-    { id: 1, role: "bot", content: "Hi there! Ready to start the interview?" },
-  ]);
-
+export default function ChatBody({ messages }: { messages: Message[] }) {
   return (
     <div
       className="flex-1 p-4 overflow-y-auto space-y-4 chat-scroll"

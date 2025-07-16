@@ -1,0 +1,106 @@
+{
+  "developer-ai-tools": {
+    "title": "Developer AI Tools Research",
+    "objective": "Understand developers' experiences with AI coding tools, their usage patterns, and decision-making processes",
+    "duration": "20-30 minutes",
+    "domain": "software development and AI tools",
+    "analysisPrompt": "You are analyzing an interview about developer AI tools usage. Focus on tool adoption, usage patterns, pain points, and preferences in software development workflows.",
+    "sections": [
+      {
+        "title": "Tool Discovery & Trial",
+        "questions": [
+          "What developer AI tools have you tried? (e.g. Cursor, Copilot, Codeium/Windsurf, Base44, V0, Replit etc.)",
+          "What other developer AI tools are you considering to use?"
+        ]
+      },
+      {
+        "title": "Tool Evaluation Deep Dive",
+        "questions": [
+          "For each tool you've tried, how much time did you give the evaluation?",
+          "What is your overall impression of each tool?",
+          "What is each tool particularly good at?",
+          "What are the limitations or weaknesses you've noticed?",
+          "Do you continue using any of these tools?",
+          "How frequently do you use them?",
+          "When do you choose to use AI tools versus coding manually?",
+          "Does the tool have an 'agent mode' where it writes code and tests in a loop? Have you tried that mode? How well does that work? How do you decide when to use this mode?"
+        ]
+      },
+      {
+        "title": "Future Considerations",
+        "questions": [
+          "For tools you're considering for future use, what have you heard that makes you interested?",
+          "What's holding you back from trying them?"
+        ]
+      },
+      {
+        "title": "Vibe-Coding Experience",
+        "questions": [
+          "Have you tried 'Vibe-Coding'? If so, what is your impression?",
+          "In your experience, what tools are best for 'Vibe-Coding', and when would you use them?"
+        ]
+      }
+    ],
+    "endingMessage": "Thank you so much for sharing your insights about developer AI tools. Your experiences will help us understand how developers are adopting and using these technologies.",
+    "keyEntities": [
+      "Cursor",
+      "Copilot",
+      "Codeium",
+      "Windsurf",
+      "Base44",
+      "V0",
+      "Replit",
+      "Claude",
+      "ChatGPT",
+      "Tabnine"
+    ],
+    "analysisSchema": {
+      "toolsDiscussed": "List of AI development tools mentioned",
+      "sentimentAnalysis": "Sentiment breakdown (positive, neutral, negative)",
+      "keyThemes": "Main themes like adoption barriers, usage patterns, tool preferences",
+      "usagePatterns": "How and when developers use these tools",
+      "recommendations": "Recommendations for tool improvement or further research"
+    }
+  },
+  "mobile-app-usage": {
+    "title": "Mobile App Usage Research",
+    "objective": "Understand user behavior and preferences for mobile applications",
+    "duration": "15-20 minutes",
+    "domain": "mobile applications and user experience",
+    "analysisPrompt": "You are analyzing an interview about mobile app usage patterns. Focus on app discovery, usage habits, user experience preferences, and decision-making factors.",
+    "sections": [
+      {
+        "title": "App Usage Background",
+        "questions": [
+          "How do you typically use your smartphone throughout the day?",
+          "What are your most frequently used apps?"
+        ]
+      },
+      {
+        "title": "App Discovery & Selection",
+        "questions": [
+          "How do you discover new apps?",
+          "What factors influence your decision to download a new app?",
+          "Can you walk me through the last time you downloaded a new app?"
+        ]
+      },
+      {
+        "title": "User Experience Preferences",
+        "questions": [
+          "What makes an app enjoyable or frustrating to use?",
+          "How important is app design versus functionality to you?",
+          "Tell me about an app you deleted recently and why."
+        ]
+      }
+    ],
+    "endingMessage": "Thank you for sharing your mobile app usage experiences. This will help us understand user preferences and behaviors.",
+    "keyEntities": ["iOS", "Android", "App Store", "Google Play", "social media", "productivity", "gaming"],
+    "analysisSchema": {
+      "appsDiscussed": "List of mobile apps mentioned",
+      "sentimentAnalysis": "User sentiment towards different apps and experiences",
+      "keyThemes": "Main themes like user experience, app discovery, usage patterns",
+      "usagePatterns": "How and when users interact with mobile apps",
+      "recommendations": "Insights for app developers and UX improvements"
+    }
+  }
+}

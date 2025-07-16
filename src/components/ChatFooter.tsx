@@ -1,12 +1,16 @@
-'use client'
+"use client";
 import { useState } from "react";
 
-export default function ChatFooter() {
+export default function ChatFooter({
+  onSend,
+}: {
+  onSend: (text: string) => void;
+}) {
   const [input, setInput] = useState("");
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    console.log("User says:", input);
+    onSend(input);
     setInput("");
   };
 
