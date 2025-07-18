@@ -15,7 +15,7 @@ export default function ChatFooter({
   };
 
   return (
-    <footer className="border-t p-4">
+    <footer className="border-t p-4 bg-white sticky bottom-0 z-10">
       <form onSubmit={handleSubmit} className="flex gap-2">
         <input
           type="text"

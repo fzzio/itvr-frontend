@@ -10,6 +10,7 @@ export default function ChatLayout() {
   const guideKeys = Object.keys(guides);
   const [selectedKey, setSelectedKey] = useState<string>(guideKeys[0]);
   const selectedGuide = (guides as Record<string, Guide>)[selectedKey];
+  const [answeredCount, setAnsweredCount] = useState(0);
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-amber-800 to-amber-200 p-4">
@@ -22,8 +23,14 @@ export default function ChatLayout() {
           />
         </div>
         <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
-          <Sidebar guide={selectedGuide} />
-          <ChatWindow guide={selectedGuide} />
+          <Sidebar
+            guide={selectedGuide}
+            answeredCount={answeredCount}
+          />
+          <ChatWindow
+            guide={selectedGuide}
+            onProgress={(n) => setAnsweredCount(n)}
+          />
         </div>
       </div>
     </div>

@@ -1,9 +1,26 @@
-'use client'
+"use client";
+import React, { forwardRef } from "react";
 import type { Message } from "@/types";
+import Spinner from "./Spinner";
 
-export default function ChatBody({ messages }: { messages: Message[] }) {
+export default function ChatBody({
+  messages,
+  isThinking = false,
+}: {
+  messages: Message[];
+  isThinking?: boolean;
+}) {
+  const ref = React.useRef<HTMLDivElement>(null);
+
+  React.useEffect(() => {
+    if (ref.current) {
+      ref.current.scrollTop = ref.current.scrollHeight;
+    }
+  }, [messages, isThinking]);
+
   return (
     <div
+      ref={ref}
       className="flex-1 p-4 overflow-y-auto space-y-4 chat-scroll"
     >
       {messages.map((m) => (
@@ -33,6 +50,7 @@ export default function ChatBody({ messages }: { messages: Message[] }) {
           </div>
         </div>
       ))}
+      {isThinking && <Spinner />}
     </div>
   );
 }
