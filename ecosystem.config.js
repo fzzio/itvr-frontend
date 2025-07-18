@@ -3,9 +3,8 @@ module.exports = {
     name: "interviewer",
     script: "npm",
     args: "run dev",
-    cwd: "/home/interviewer/itvr-interviewer",
+    cwd: "/home/interviewer/itvr-frontend",
     env: {
-      NODE_ENV: "production",
       GOOGLE_GENERATIVE_AI_API_KEY: "AIzaSyDJdC6t8gyIYs0lcW4mOkYmKsh03skK8-w"
     }
   }]
