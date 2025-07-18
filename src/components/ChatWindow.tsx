@@ -1,7 +1,11 @@
 "use client";
+
 import { useState, useEffect, useRef } from "react";
 import { useTimer } from "@/context/TimerContext";
-import type { Guide, Message } from "@/types";
+import type { Guide } from "@/types";
+import type { CoreMessage } from "ai";
+import { nextInterviewMessage } from "@/lib/interviewer";
+
 import ChatHeader from "./ChatHeader";
 import ChatBody from "./ChatBody";
 import ChatFooter from "./ChatFooter";
@@ -10,78 +14,72 @@ import SummaryScreen from "./SummaryScreen";
 
 export default function ChatWindow({
   guide,
+  selectedKey,
   onProgress,
 }: {
   guide: Guide;
-  onProgress: (coveredSections: number) => void;
+  selectedKey: string;
+  onProgress: (coveredQuestions: number) => void;
 }) {
   const { start, stop } = useTimer();
-  const allQs = guide.sections.flatMap((sec) => sec.questions);
-  const totalQ = allQs.length;
-
   const [phase, setPhase] = useState<"welcome" | "chat" | "summary">("welcome");
-  const [messages, setMessages] = useState<Message[]>([]);
-  const [qIndex, setQIndex] = useState(0);
-  const [offtopicCount, setOfftopicCount] = useState(0);
+  const [messages, setMessages] = useState<CoreMessage[]>([]);
   const [isThinking, setIsThinking] = useState(false);
-
   const bodyRef = useRef<HTMLDivElement>(null);
 
+  // For progress: count how many questions (assistant messages) have been shown
+  const askedCount = messages.filter((m) => m.role === "assistant").length;
+
+  // Scroll & report progress on each message update
   useEffect(() => {
-    onProgress(qIndex);
+    onProgress(askedCount);
     if (bodyRef.current) {
       bodyRef.current.scrollTop = bodyRef.current.scrollHeight;
     }
-  }, [qIndex, guide.sections, onProgress]);
+  }, [messages, askedCount, onProgress]);
 
-  // Start interview
-  const begin = () => {
+  // Kick off the interview: empty history => system prompt + Q1
+  const begin = async () => {
     start();
     setPhase("chat");
-    setMessages([{ id: 0, role: "bot", content: allQs[0] }]);
-    setQIndex(1);
+    setIsThinking(true);
+
+    const firstQ = await nextInterviewMessage({
+      guideKey: selectedKey,
+      messages: [], // tells the server to inject the system prompt and first question
+    });
+
+    setMessages([{ role: "assistant", content: firstQ }]);
+    setIsThinking(false);
   };
 
-  const handleSend = (text: string) => {
-    setMessages((m) => [...m, { id: m.length, role: "user", content: text }]);
-    // off-topic detection (mock: if reply doesn’t match “got it” or contains “?”)
-    const onTopic = /got it/i.test(text) || text.trim().length < 50;
-    if (!onTopic) {
-      setOfftopicCount((c) => c + 1);
-      if (offtopicCount < 2) {
-        setMessages((m) => [
-          ...m,
-          {
-            id: m.length + 1,
-            role: "bot",
-            content: "I'm still working through the guide—let's keep going.",
-          },
-        ]);
-        return;
-      }
-      // reset after 3 off-topic
-      setOfftopicCount(0);
-    }
+  // Handle each user answer
+  const handleSend = async (text: string) => {
+    // 1️⃣ Append user message
+    const userMsg: CoreMessage = { role: "user", content: text };
+    const history = [...messages, userMsg];
+    setMessages(history);
 
-    // Normal flow: ask next
-    if (qIndex < totalQ) {
-      setIsThinking(true);
-      setTimeout(() => {
-        setIsThinking(false);
-        setMessages((m) => [
-          ...m,
-          { id: m.length, role: "bot", content: allQs[qIndex] },
-        ]);
-        setQIndex((i) => i + 1);
-      }, 1000);
-    } else {
-      // finish
+    // 2️⃣ Ask Gemini for the recap + next question (or ending)
+    setIsThinking(true);
+    const reply = await nextInterviewMessage({
+      guideKey: selectedKey,
+      messages: history,
+    });
+    setIsThinking(false);
+
+    // 3️⃣ Append assistant reply
+    const botMsg: CoreMessage = { role: "assistant", content: reply };
+    setMessages((prev) => [...prev, botMsg]);
+
+    // 4️⃣ If this was the final thank-you, move to summary
+    if (reply.trim() === guide.endingMessage.trim()) {
       stop();
-      console.log("FINISH");
       setPhase("summary");
     }
   };
 
+  // Render phases
   if (phase === "welcome") {
     return <WelcomeScreen onStart={begin} guide={guide} />;
   }
@@ -91,12 +89,13 @@ export default function ChatWindow({
     );
   }
 
+  // Main chat UI
   return (
     <div
       className="lg:col-span-3 flex flex-col bg-white rounded-lg shadow"
       style={{ maxHeight: "calc(100vh - 3rem)" }}
     >
-      <ChatHeader title={guide.title} />
+      <ChatHeader title={selectedKey} />
       <ChatBody ref={bodyRef} messages={messages} isThinking={isThinking} />
       <ChatFooter onSend={handleSend} />
     </div>
