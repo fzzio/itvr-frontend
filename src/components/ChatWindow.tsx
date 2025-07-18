@@ -73,9 +73,9 @@ export default function ChatWindow({
     setMessages((prev) => [...prev, botMsg]);
 
     // 4️⃣ If this was the final thank-you, move to summary
-    if (reply.trim() === guide.endingMessage.trim()) {
+    if (reply.trim().includes(guide.endingMessage.trim())) {
       stop();
-      setPhase("summary");
+      setTimeout(() => setPhase("summary"), 5000);
     }
   };
 
@@ -85,7 +85,12 @@ export default function ChatWindow({
   }
   if (phase === "summary") {
     return (
-      <SummaryScreen guide={guide} onRestart={() => window.location.reload()} />
+      <SummaryScreen
+        guide={guide}
+        guideKey={selectedKey}
+        messages={messages}
+        onRestart={() => window.location.reload()}
+      />
     );
   }
 

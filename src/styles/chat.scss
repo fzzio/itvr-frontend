@@ -27,3 +27,7 @@ select, option {
   background-color: rgba(var(--color-amber-600), 0.5);
   border-radius: 9999px;
 }
+
+pre {
+  color: var(--color-gray-700);
+}
