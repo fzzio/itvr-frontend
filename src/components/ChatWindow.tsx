@@ -1,5 +1,6 @@
 "use client";
 import { useState, useEffect, useRef } from "react";
+import { useTimer } from "@/context/TimerContext";
 import type { Guide, Message } from "@/types";
 import ChatHeader from "./ChatHeader";
 import ChatBody from "./ChatBody";
@@ -14,6 +15,7 @@ export default function ChatWindow({
   guide: Guide;
   onProgress: (coveredSections: number) => void;
 }) {
+  const { start, stop } = useTimer();
   const allQs = guide.sections.flatMap((sec) => sec.questions);
   const totalQ = allQs.length;
 
@@ -33,12 +35,11 @@ export default function ChatWindow({
   }, [qIndex, guide.sections, onProgress]);
 
   // Start interview
-  const start = () => {
-    setMessages([
-      { id: 0, role: "bot", content: guide.sections[0].questions[0] },
-    ]);
-    setQIndex(1);
+  const begin = () => {
+    start();
     setPhase("chat");
+    setMessages([{ id: 0, role: "bot", content: allQs[0] }]);
+    setQIndex(1);
   };
 
   const handleSend = (text: string) => {
@@ -75,13 +76,14 @@ export default function ChatWindow({
       }, 1000);
     } else {
       // finish
+      stop();
       console.log("FINISH");
       setPhase("summary");
     }
   };
 
   if (phase === "welcome") {
-    return <WelcomeScreen onStart={start} guide={guide} />;
+    return <WelcomeScreen onStart={begin} guide={guide} />;
   }
   if (phase === "summary") {
     return (

@@ -1,5 +1,6 @@
 'use client'
 import { useState } from "react";
+import { TimerProvider } from "@/context/TimerContext";
 import guides from "@/data/discussion-guides.json";
 import type { Guide } from "@/types";
 import GuideSelector from "./GuideSelector";
@@ -13,26 +14,28 @@ export default function ChatLayout() {
   const [answeredCount, setAnsweredCount] = useState(0);
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-amber-800 to-amber-200 p-4">
-      <div className="max-w-6xl mx-auto">
-         <div className="mb-4">
-          <GuideSelector
-            guides={guides as Record<string, Guide>}
-            selectedKey={selectedKey}
-            onChange={setSelectedKey}
-          />
-        </div>
-        <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
-          <Sidebar
-            guide={selectedGuide}
-            answeredCount={answeredCount}
-          />
-          <ChatWindow
-            guide={selectedGuide}
-            onProgress={(n) => setAnsweredCount(n)}
-          />
+    <TimerProvider>
+      <div className="min-h-screen bg-gradient-to-br from-amber-800 to-amber-200 p-4">
+        <div className="max-w-6xl mx-auto">
+          <div className="mb-4">
+            <GuideSelector
+              guides={guides as Record<string, Guide>}
+              selectedKey={selectedKey}
+              onChange={setSelectedKey}
+            />
+          </div>
+          <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
+            <Sidebar
+              guide={selectedGuide}
+              answeredCount={answeredCount}
+            />
+            <ChatWindow
+              guide={selectedGuide}
+              onProgress={(n) => setAnsweredCount(n)}
+            />
+          </div>
         </div>
       </div>
-    </div>
+    </TimerProvider>
   );
 }
