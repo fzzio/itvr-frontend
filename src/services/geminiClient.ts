@@ -29,8 +29,10 @@ export async function askGemini({
 }
 
 function buildSystemPrompt(guideKey: string): string {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const guide = (guides as Record<string, any>)[guideKey];
   const sections = guide.sections
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     .flatMap((sec: any) => sec.questions.map((q: string) => `• ${q}`))
     .join("\n");
 
@@ -69,15 +71,18 @@ export async function askSummary({
 }
 
 function buildSummaryPrompt(guideKey: string, messages: CoreMessage[]): string {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const guide = (guides as any)[guideKey];
 
   // build a skeleton for every section
   const skeleton = Object.entries(guide.sections)
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     .map(([_, sec]) => {
-      const qLines = sec.questions
+      const section = sec as { title: string; questions: string[] };
+      const qLines = section.questions
         .map((q: string) => `    "${q}": ""`)
         .join(",\n");
-      return `"${sec.title}": {\n${qLines}\n  }`;
+      return `"${section.title}": {\n${qLines}\n  }`;
     })
     .join(",\n");
 

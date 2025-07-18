@@ -86,7 +86,6 @@ export default function ChatWindow({
   if (phase === "summary") {
     return (
       <SummaryScreen
-        guide={guide}
         guideKey={selectedKey}
         messages={messages}
         onRestart={() => window.location.reload()}

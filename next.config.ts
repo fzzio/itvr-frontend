@@ -1,20 +1,10 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  basePath: "/interviewer",
-  assetPrefix: "/interviewer/",
+  basePath: process.env.BASE_PATH || '',
+  assetPrefix: process.env.BASE_PATH || '',
 
   reactStrictMode: true,
-  swcMinify: true,
-
-  rewrites: async () => {
-    return [
-      {
-        source: "/interviewer/:path*",
-        destination: "/:path*"
-      },
-    ];
-  },
 };
 
 export default nextConfig;

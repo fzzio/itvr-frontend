@@ -1,17 +1,14 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import type { Guide } from "@/types";
 import type { CoreMessage } from "ai";
 import Timer from "./Timer";
 import Spinner from "./Spinner";
 
 export default function SummaryScreen({
-  guide,
   guideKey,
   onRestart,
   messages,
 }: {
-  guide: Guide;
   guideKey: string;
   onRestart: () => void;
   messages: CoreMessage[];
@@ -34,7 +31,7 @@ export default function SummaryScreen({
         setRawSummary(text);
 
         // 🔍 Parse the JSON
-        const parsed = JSON.parse(text);
+        const parsed = JSON.parse(rawSummary || "{}");
         console.log("Parsed summary JSON:", parsed);
         setSummary(parsed);
 
@@ -45,7 +42,7 @@ export default function SummaryScreen({
         setLoading(false);
       }
     })();
-  }, [guideKey, messages]);
+  }, [guideKey, messages, rawSummary]);
 
   if (loading) {
     return (
