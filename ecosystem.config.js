@@ -1,6 +1,6 @@
 module.exports = {
   apps: [{
-    name: "joey-api",
+    name: "interviewer",
     script: "npm",
     args: "run dev",
     cwd: "/home/interviewer/itvr-interviewer",
