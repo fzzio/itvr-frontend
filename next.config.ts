@@ -1,7 +1,20 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  /* config options here */
+  basePath: "/interviewer",
+  assetPrefix: "/interviewer/",
+
+  reactStrictMode: true,
+  swcMinify: true,
+
+  rewrites: async () => {
+    return [
+      {
+        source: "/interviewer/:path*",
+        destination: "/:path*"
+      },
+    ];
+  },
 };
 
 export default nextConfig;
