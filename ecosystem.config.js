@@ -2,7 +2,7 @@ module.exports = {
   apps: [{
     name: "joey-api",
     script: "npm",
-    args: "run start",
+    args: "run dev",
     cwd: "/home/interviewer/itvr-interviewer",
     env: {
       NODE_ENV: "production",
