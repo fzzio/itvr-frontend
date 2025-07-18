@@ -31,6 +31,7 @@ export default function ChatLayout() {
             />
             <ChatWindow
               guide={selectedGuide}
+              selectedKey={selectedKey}
               onProgress={(n) => setAnsweredCount(n)}
             />
           </div>
